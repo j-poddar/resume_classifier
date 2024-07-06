@@ -1,36 +1,80 @@
 import streamlit as st
+import joblib
+import fitz  # PyMuPDF
+import pandas as pd
 import pickle
-import numpy as np
+import matplotlib.pyplot as plt
+from tensorflow.keras.models import load_model
+import requests 
+import os
 
-# Load the saved model
-with open('car_resale_price_prediction_rf.pkl', 'rb') as file:
-    model = pickle.load(file)
 
-# Title of the web app
-st.title('Car Reselling Price Prediction')
 
-# Get user input
-age = st.number_input('Age of the car (in years)', min_value=0, max_value=50, value=5)
-km_driven = st.number_input('Number of kilometers the car has been driven', min_value=0, max_value=1000000, value=10000)
-fuel_type = st.selectbox('Fuel type of the car', ['Petrol', 'Diesel', 'CNG'])
-transmission = st.selectbox('Gear transmission', ['Automatic', 'Manual'])
-previous_owners = st.number_input('Number of previous owners', min_value=0, max_value=10, value=1)
+# Load the model and vectorizer
 
-# Preprocess the inputs to match the model's expected format
-fuel_type_mapping = {'Petrol': 0, 'Diesel': 1, 'CNG': 2}
-transmission_mapping = {'Manual': 0, 'Automatic': 1}
+# Function to download files from a URL
+def download_file(url, dest_path):
+    response = requests.get(url)
+    with open(dest_path, 'wb') as file:
+        file.write(response.content)
 
-fuel_type_encoded = fuel_type_mapping[fuel_type]
-transmission_encoded = transmission_mapping[transmission]
+# URL of the .pkl file hosted on GitHub
+model_url = 'https://github.com/j-poddar/resume_classifier/releases/download/model_classifier/resume_classifier.pkl'
+# Download the model if it doesn't already exist
+if not os.path.exists('resume_classifier.pkl'):
+    download_file(model_url, 'resume_classifier.pkl')
 
-# Prepare the feature vector for prediction
-features = np.array([age, km_driven, fuel_type_encoded, transmission_encoded, previous_owners]).reshape(1, -1)
+# Load the model and vectorizer
+model = joblib.load('resume_classifier.pkl')
 
-# Make prediction
-if st.button('Predict'):
-    predicted_price = model.predict(features)[0]
-    st.write(f'The predicted reselling price of the car is: ₹ {predicted_price:.2f}')
 
-# Run the Streamlit app
-if __name__ == '__main__':
-    st.run()
+
+
+
+vectorizer = joblib.load('vectorizer.pkl')
+
+def extract_text_from_pdf(pdf_file):
+    text = ""
+    doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
+    for page_num in range(len(doc)):
+        page = doc.load_page(page_num)
+        text += page.get_text()
+    return text
+
+def preprocess_text(text):
+    # Add any text preprocessing steps here if needed
+    return text
+
+def classify_resumes(uploaded_files):
+    results = []
+    for uploaded_file in uploaded_files:
+        text = extract_text_from_pdf(uploaded_file)
+        cleaned_text = preprocess_text(text)
+        features = vectorizer.transform([cleaned_text])
+        prediction = model.predict(features)
+        results.append((uploaded_file.name, prediction[0]))
+    return results
+
+# Streamlit app
+st.title('Resume Categorization')
+uploaded_files = st.file_uploader("Upload resumes in PDF format", type="pdf", accept_multiple_files=True)
+
+if uploaded_files:
+    with st.spinner('Classifying resumes...'):
+        results = classify_resumes(uploaded_files)
+        
+        # Create a DataFrame to store the results
+        df = pd.DataFrame(results, columns=['Resume_Title', 'Resume_Category'])
+        
+        # Display the results in a table
+        st.write("### Classification Results")
+        st.dataframe(df)
+        
+        # Display the results in a pie chart
+        category_counts = df['Resume_Category'].value_counts()
+        fig, ax = plt.subplots()
+        ax.pie(category_counts, labels=category_counts.index, autopct='%1.1f%%', startangle=90)
+        ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        
+        st.write("### Category Distribution")
+        st.pyplot(fig)
