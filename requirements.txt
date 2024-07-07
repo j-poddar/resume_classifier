@@ -1,0 +1,13 @@
+pandas
+numpy
+matplotlib
+seaborn
+wordcloud
+nltk
+gensim
+scikit-learn
+streamlit
+joblib
+pymupdf
+tensorflow
+requests
