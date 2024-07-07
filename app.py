@@ -13,6 +13,7 @@ import os
 # Load the model and vectorizer
 
 # Function to download files from a URL
+@st.cache_resource
 def download_file(url, dest_path):
     response = requests.get(url)
     with open(dest_path, 'wb') as file:
