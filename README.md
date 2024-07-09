@@ -25,7 +25,7 @@ HR, Designer, Information-Technology, Teacher, Advocate, Business-Development, H
 The web application allows users to upload multiple resumes and get predictions for each. The application can be accessed [from here](https://resumeclassifier-jp.streamlit.app).<br/>
 #### The app features:
 
-- **Upload Button:** For users to upload multiple resume files. The user can test with few sample resumes available [here].
+- **Upload Button:** For users to upload multiple resume files. The user can test with few sample resumes available [here](https://github.com/j-poddar/resume_classifier/tree/main/documents/sample_resumes).
 - **Predict Button:** To start the prediction process.
 - **Results Display:** Shows the uploaded files and their predicted categories.
 - **Pie Chart:** Visualizes the distribution of categories among the uploaded resumes.
