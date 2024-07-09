@@ -22,8 +22,6 @@ The training dataset contains over 2400 resumes in both string and PDF formats. 
 HR, Designer, Information-Technology, Teacher, Advocate, Business-Development, Healthcare, Fitness, Agriculture, BPO, Sales, Consultant, Digital-Media, Automobile, Chef, Finance, Apparel, Engineering, Accountant, Construction, Public-Relations, Banking, Arts, Aviation.
 
 # Web Application
-PUT SCREENSHOT HERE
-
 The web application allows users to upload multiple resumes and get predictions for each. The application can be accessed [from here](https://resumeclassifier-jp.streamlit.app).<br/>
 #### The app features:
 
@@ -33,6 +31,7 @@ The web application allows users to upload multiple resumes and get predictions 
 - **Pie Chart:** Visualizes the distribution of categories among the uploaded resumes.
 
 ## Web App Usage
+You can try the live demo of the application [here](https://resumeclassifier-jp.streamlit.app). Please follow below steps:
 1. Upload resume files using the upload button.
    
 2. Click the predict button to start the prediction process.
