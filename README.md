@@ -33,8 +33,8 @@ The web application allows users to upload multiple resumes and get predictions 
 ## Web App Usage
 You can try the live demo of the application [here](https://resumeclassifier-jp.streamlit.app). Please follow below steps:
 1. Upload resume files using the upload button.
-   
-2. Click the predict button to start the prediction process.
+   ![Resume Classifier](https://github.com/j-poddar/resume_classifier/blob/main/images/screenshots/Resume_Classifier_Home_Page.png)
+2. Click the predict button to start the prediction process. You can test with few sample resumes available [here](https://github.com/j-poddar/resume_classifier/tree/main/documents/sample_resumes).
 3. View the predicted categories and the pie chart of the category distribution.
 
 
