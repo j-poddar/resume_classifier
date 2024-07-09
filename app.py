@@ -57,7 +57,7 @@ def classify_resumes(uploaded_files):
     return results
 
 # Streamlit app
-st.title('Resume Categorization')
+st.title('Resume Classifier')
 uploaded_files = st.file_uploader("Upload resumes in PDF format", type="pdf", accept_multiple_files=True)
 
 if uploaded_files:
